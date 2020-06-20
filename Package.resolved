@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "GBDeviceInfo",
+        "repositoryURL": "https://github.com/lmirosevic/GBDeviceInfo.git",
+        "state": {
+          "branch": "master",
+          "revision": "3146a7a2708fd40075c28863e853831806cb065f",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
