@@ -3,6 +3,8 @@
 //  Ink
 //
 //  Created by Fatih Balsoy on 6/12/20.
+//  Published by Fatih Balsoy on 6/20/20.
+//
 //  Copyright © 2020 BITS Laboratory. All rights reserved.
 //
 
@@ -10,7 +12,7 @@ import Foundation
 import GBDeviceInfo
 import UIKit
 
-enum RulerUnit {
+public enum RulerUnit {
     case centimeters
     case inches
 
@@ -34,32 +36,32 @@ private class RulerMeasurements {
 }
 
 public class Ruler: UIView {
-    var direction: NSLayoutConstraint.Axis = .horizontal
-    var offset: CGFloat = 0
-    var lineSpacing: CGFloat = 6
-    var unitTicks: CGFloat = 10 // ticks per unit
+    public var direction: NSLayoutConstraint.Axis = .horizontal
+    public var offset: CGFloat = 0
+    public var lineSpacing: CGFloat = 6
+    public var unitTicks: CGFloat = 10 // ticks per unit
 
-    var shortLine: CGFloat = 15
-    var midLine: CGFloat = (30 + 15) / 2
-    var longLine: CGFloat = 30
+    public var shortLine: CGFloat = 15
+    public var midLine: CGFloat = (30 + 15) / 2
+    public var longLine: CGFloat = 30
 
-    var tickColor: UIColor = .black
-    var labelColor: UIColor = .black
-    var hasLabels: Bool = true
-    var pixelAccurate: Bool = false
-    var doubleSided: Bool = false
-    var doubleUnits: Bool = false
+    public var tickColor: UIColor = .black
+    public var labelColor: UIColor = .black
+    public var hasLabels: Bool = true
+    public var pixelAccurate: Bool = false
+    public var doubleSided: Bool = false
+    public var doubleUnits: Bool = false
 
-    var accuracyLocale = "NOT ACCURATE"
-    var customLocale = "EDIT"
-    var accuracyWarnings: Bool = true
+    public var accuracyLocale = "NOT ACCURATE"
+    public var customLocale = "EDIT"
+    public var accuracyWarnings: Bool = true
     private var isAccurate: Bool = false
     private var accuracyLabelFrame = CGRect()
     private var usingCustomPPI: Bool = false
     private var customPixelDensity: CGFloat?
     private var customPPIMultiplier: CGFloat = 332 / 227
 
-    var units: RulerUnit = .centimeters
+    public var units: RulerUnit = .centimeters
     public weak var delegate: RulerDelegate?
 
     public override func draw(_ rect: CGRect) {
@@ -85,11 +87,11 @@ public class Ruler: UIView {
         }
     }
 
-    func midLineLength(_ divided: CGFloat = 2) -> CGFloat {
+    public func midLineLength(_ divided: CGFloat = 2) -> CGFloat {
         return (longLine + shortLine) / divided
     }
 
-    func setPixelDensity(_ ppi: CGFloat?) {
+    public func setPixelDensity(_ ppi: CGFloat?) {
         if let p = ppi {
             if p < 1 { customPixelDensity = 1 } else {
                 customPixelDensity = p * customPPIMultiplier
@@ -101,7 +103,7 @@ public class Ruler: UIView {
         setNeedsDisplay()
     }
 
-    func getPixelDensity() -> CGFloat {
+    public func getPixelDensity() -> CGFloat {
         return (customPixelDensity ?? customPPIMultiplier) / customPPIMultiplier
     }
 
