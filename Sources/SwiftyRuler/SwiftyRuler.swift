@@ -8,7 +8,11 @@
 
 import Foundation
 import GBDeviceInfo
-import UIKit
+#if canImport(UIKit)
+    import UIKit
+#else
+    import Cocoa
+#endif
 
 /// Backward-compatible enum for unit of measurement used by SwiftyRuler
 ///
@@ -29,7 +33,7 @@ public enum RulerUnit {
     }
 }
 
-@available(iOS 10.0, *)
+@available(iOS 10.0, macOS 10.12, tvOS 10.0, *)
 public extension UnitLength {
     /// Converts `UnitLength` to SwiftyRuler compatible enum `RulerUnit`
     ///
@@ -164,9 +168,11 @@ public class Ruler: UIView {
 
     // MARK: - Gestures
 
-    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    @available(OSX 10.12.2, *)
+    private func touchesBeganUX(_ touches: Set<UITouch>, with event: UIEvent?, type eventType: UIEvent.EventType) {
         guard let location = touches.first?.location(in: self) else { return }
-        if accuracyLabelFrame.contains(location), let e = event, e.type == .touches {
+
+        if accuracyLabelFrame.contains(location), let e = event, e.type == eventType {
             if usingCustomPPI {
                 delegate?.ruler?(didPressCustomizePixelDensity: self, currentDensity: getPixelDensity(), using: e)
             } else {
@@ -174,6 +180,19 @@ public class Ruler: UIView {
             }
         }
     }
+
+    #if canImport(UIKit)
+        public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+            touchesBeganUX(touches, with: event, type: .touches)
+        }
+    #else
+        @available(OSX 10.6, *)
+        public override func touchesBegan(with event: NSEvent) {
+            if #available(OSX 10.12.2, *) {
+                touchesBeganUX(event.touches(for: self), with: event, type: .leftMouseUp)
+            }
+        }
+    #endif
 
     // MARK: - Helpers
 
@@ -209,8 +228,12 @@ public class Ruler: UIView {
     }
 
     private func getPixelDensityPrivate() -> CGFloat {
-        #if targetEnvironment(macCatalyst) || targetEnvironment(simulator)
-            var ppi = UIScreen.main.nativeScale * 144
+        #if targetEnvironment(macCatalyst) || targetEnvironment(simulator) || os(macOS) || os(tvOS)
+            #if os(macOS)
+                var ppi: CGFloat = 2 * 144
+            #else
+                var ppi = UIScreen.main.nativeScale * 144
+            #endif
             if let p = customPixelDensity {
                 ppi = p
                 usingCustomPPI = true
