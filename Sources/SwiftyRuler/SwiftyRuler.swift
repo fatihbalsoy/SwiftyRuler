@@ -1,17 +1,21 @@
 //
-//  Ruler.swift
-//  Ink
+//  SwiftyRuler.swift
+//  SwiftyRuler
 //
 //  Created by Fatih Balsoy on 6/12/20.
-//  Published by Fatih Balsoy on 6/20/20.
-//
-//  Copyright © 2020 BITS Laboratory. All rights reserved.
+//  Copyright (c) 2020 Fatih Balsoy. All rights reserved.
 //
 
 import Foundation
 import GBDeviceInfo
 import UIKit
 
+/// Backward-compatible enum for unit of measurement used by SwiftyRuler
+///
+/// Convert Apple-defined enum `UnitLength` (iOS 10) to `RulerUnit` by using:
+/// ```
+/// UnitLength.centimeters.rulerUnit()
+/// ```
 public enum RulerUnit {
     case centimeters
     case inches
@@ -25,44 +29,126 @@ public enum RulerUnit {
     }
 }
 
+@available(iOS 10.0, *)
+public extension UnitLength {
+    /// Converts `UnitLength` to SwiftyRuler compatible enum `RulerUnit`
+    ///
+    /// Only converts centimeters and inches,
+    /// returns centimeters for anything else.
+    ///
+    /// Can be used to integrate app-defined variables with SwiftyRuler like the following:
+    /// ```
+    /// let unit = UnitLength.centimeters
+    /// ruler.units = unit.rulerUnit()
+    /// ```
+    func rulerUnit() -> RulerUnit {
+        switch self {
+        case .centimeters:
+            return .centimeters
+        case .inches:
+            return .inches
+        default:
+            return .centimeters
+        }
+    }
+}
+
 private class RulerMeasurements {
     var inchTickSpacing: CGFloat!
     var numberOfTicks: CGFloat!
 }
 
+// MARK: - Ruler Delegate
+
 @objc public protocol RulerDelegate: AnyObject {
+    /// Triggered when accuracy disclaimer is pressed. Can be used to implement a user interface claiming the inaccuracy of the ruler and giving the option to enter a custom pixel density.
     @objc optional func ruler(didPressAccuracyWarning ruler: Ruler, using event: UIEvent)
+    /// Triggered when the edit button is pressed. Can be used to implement a user interface to adjust the pixel density of the ruler.
     @objc optional func ruler(didPressCustomizePixelDensity ruler: Ruler, currentDensity: CGFloat, using event: UIEvent)
 }
 
+// MARK: - Ruler
+
+/// UIView subclass, Ruler, renders all the required visual components like ticks and labels
 public class Ruler: UIView {
+    // MARK: - Tick Layout
+
+    /// The direction in which the ticks are layed out on the ruler
+    ///
+    /// - Horizontal: |
+    /// - Vertical: __
     public var direction: NSLayoutConstraint.Axis = .horizontal
-    public var offset: CGFloat = 0
-    public var lineSpacing: CGFloat = 6
+    /// Space between each tick
+    public var tickSpacing: CGFloat = 6
+
+    /// Ticks per unit
+    ///
+    /// - Ticks per inch: 16
+    /// - Ticks per centimeter: 10
     public var unitTicks: CGFloat = 10 // ticks per unit
 
-    public var shortLine: CGFloat = 15
-    public var midLine: CGFloat = (30 + 15) / 2
-    public var longLine: CGFloat = 30
+    // MARK: - Length
+
+    /// Length of each short tick
+    public var shortTickLength: CGFloat = 15
+    /// Length of each middle tick
+    public var midTickLength: CGFloat = (30 + 15) / 2
+    /// Length of each long tick
+    public var longTickLength: CGFloat = 30
+
+    // MARK: - Colors
 
     public var tickColor: UIColor = .black
     public var labelColor: UIColor = .black
+
+    // MARK: - Booleans
+
     public var hasLabels: Bool = true
+    /// If true, ruler will display accurate length of the specified unit on the screen.
     public var pixelAccurate: Bool = false
+    /// Displays the same unit of length on both sides of the ruler if `doubleUnits` is `false` and or the alternative unit of length if `true`.
     public var doubleSided: Bool = false
+    /// Displays the alternative unit of length.
+    ///
+    /// If `units` is `.centimeters` and `doubleUnits` is `true`, the opposite edge of the ruler will display `.inches`.
     public var doubleUnits: Bool = false
 
+    // MARK: - Accuracy
+
+    /// Text of label when the ruler cannot display accurate measurements.
+    /// Override to localize, `"NOT ACCURATE"`, for other languages.
     public var accuracyLocale = "NOT ACCURATE"
+    /// Text of label when the ruler allows user-defined pixel densities.
+    /// Override to localize, `"EDIT"`, for other languages.
     public var customLocale = "EDIT"
+    /// Include a disclaimer, at 0cm, warning the user that the ruler is not accurate based on an error.
     public var accuracyWarnings: Bool = true
+    /// Include an edit button, at 0cm, so the user can modify the length of measurements based on pixel density.
+    ///
+    /// Set pixel density by using:
+    /// ```
+    /// ruler.setPixelDensity(227)
+    /// ```
+    /// Reset pixel density with `nil`:
+    /// ```
+    /// ruler.setPixelDensity(nil)
+    /// ```
+    public var usingCustomPPI: Bool = false
+
     private var isAccurate: Bool = false
     private var accuracyLabelFrame = CGRect()
-    private var usingCustomPPI: Bool = false
     private var customPixelDensity: CGFloat?
-    private var customPPIMultiplier: CGFloat = 332 / 227
+    #if targetEnvironment(macCatalyst)
+        private var customPPIMultiplier: CGFloat = 332 / 227
+    #else
+        private var customPPIMultiplier: CGFloat = 1
+    #endif
 
+    /// The unit of measurement displayed on the ruler.
     public var units: RulerUnit = .centimeters
     public weak var delegate: RulerDelegate?
+
+    // MARK: - Draw
 
     public override func draw(_ rect: CGRect) {
         backgroundColor = .clear
@@ -76,6 +162,8 @@ public class Ruler: UIView {
         }
     }
 
+    // MARK: - Gestures
+
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let location = touches.first?.location(in: self) else { return }
         if accuracyLabelFrame.contains(location), let e = event, e.type == .touches {
@@ -87,10 +175,22 @@ public class Ruler: UIView {
         }
     }
 
+    // MARK: - Helpers
+
+    /// Generate the length for each middle tick based on the lengths of long and short ticks.
+    ///
+    /// - Parameters:
+    ///     - divided: The peak of the middle tick determined by the median of other ticks.
     public func midLineLength(_ divided: CGFloat = 2) -> CGFloat {
-        return (longLine + shortLine) / divided
+        return (longTickLength + shortTickLength) / divided
     }
 
+    /// Set a custom pixel density to adjust the spacing of each tick. Set `nil` to reset pixel density.
+    ///
+    /// Can be entered by user if `usingCustomPPI` is `true` or programmatically when `false`.
+    ///
+    /// - Parameters:
+    ///     - ppi: Pixel per Inch.
     public func setPixelDensity(_ ppi: CGFloat?) {
         if let p = ppi {
             if p < 1 { customPixelDensity = 1 } else {
@@ -103,8 +203,9 @@ public class Ruler: UIView {
         setNeedsDisplay()
     }
 
+    /// Get the pixel density used by the ruler to measure the space between each tick.
     public func getPixelDensity() -> CGFloat {
-        return (customPixelDensity ?? customPPIMultiplier) / customPPIMultiplier
+        return (customPixelDensity ?? getPixelDensityPrivate()) / customPPIMultiplier
     }
 
     private func getPixelDensityPrivate() -> CGFloat {
@@ -130,7 +231,7 @@ public class Ruler: UIView {
     }
 
     private func generateForScreen() {
-        lineSpacing = getRuler(for: units).inchTickSpacing
+        tickSpacing = getRuler(for: units).inchTickSpacing
         unitTicks = getRuler(for: units).numberOfTicks
     }
 
@@ -139,9 +240,9 @@ public class Ruler: UIView {
         var x: CGFloat = 0
         var y: CGFloat = 0
 
-        let linesDist: CGFloat = pixelAccurate ? getRuler(for: unit).inchTickSpacing : lineSpacing
+        let linesDist: CGFloat = pixelAccurate ? getRuler(for: unit).inchTickSpacing : tickSpacing
 
-        var count = 0 + offset
+        var count: CGFloat = 0
         let vertical = direction == .vertical
         while (vertical && y <= bounds.size.height) || (!vertical && x <= bounds.size.width) {
             let tick = vertical ? y : x
@@ -161,7 +262,7 @@ public class Ruler: UIView {
         let numberOfTicks = getRuler(for: unit).numberOfTicks ?? unitTicks
         let isLong = count.truncatingRemainder(dividingBy: numberOfTicks) == 0
         let isMid = count.truncatingRemainder(dividingBy: numberOfTicks / 2) == 0
-        let length = isLong ? longLine : isMid ? midLine : shortLine
+        let length = isLong ? longTickLength : isMid ? midTickLength : shortTickLength
 
         let vX = mirror ? bounds.width - length : 0
         let vY = mirror ? bounds.height - length : 0
@@ -249,9 +350,6 @@ fileprivate extension Int {
 fileprivate extension NSString {
     func drawWithBasePoint(basePoint: CGPoint, angle: CGFloat, attributes: [NSAttributedString.Key: Any]) {
         let textSize: CGSize = size(withAttributes: attributes)
-
-        // sizeWithAttributes is only effective with single line NSString text
-        // use boundingRectWithSize for multi line text
 
         guard let context: CGContext = UIGraphicsGetCurrentContext() else { return }
 
