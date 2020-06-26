@@ -2,6 +2,7 @@ use_frameworks!
 
 target 'SwiftyRuler_Example' do
   pod 'SwiftyRuler', :path => '../'
+  pod 'SnapKit'
 
   target 'SwiftyRuler_Tests' do
     inherit! :search_paths

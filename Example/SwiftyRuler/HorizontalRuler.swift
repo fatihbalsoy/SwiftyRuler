@@ -1,16 +1,16 @@
 //
-//  ViewController.swift
-//  SwiftyRuler
+//  HorizontalRuler.swift
+//  SwiftyRuler_Example
 //
-//  Created by Fatih Balsoy on 06/21/2020.
-//  Copyright (c) 2020 Fatih Balsoy. All rights reserved.
+//  Created by Fatih Balsoy on 6/22/20.
+//  Copyright © 2020 CocoaPods. All rights reserved.
 //
 
 import UIKit
 import SwiftyRuler
 import SnapKit
 
-class ViewController: UIViewController, RulerDelegate {
+class HorizontalRuler: UIViewController, RulerDelegate {
     
     let ruler: Ruler = {
         let ruler = Ruler()
@@ -19,7 +19,6 @@ class ViewController: UIViewController, RulerDelegate {
         ruler.midTickLength = ruler.midLineLength(2)
         ruler.pixelAccurate = true
         ruler.doubleUnits = true
-        ruler.direction = .vertical
         return ruler
     }()
     
@@ -34,9 +33,9 @@ class ViewController: UIViewController, RulerDelegate {
         
         view.addSubview(ruler)
         ruler.snp.makeConstraints { (make) in
-            make.top.bottom.equalTo(view)
-            make.centerX.equalTo(view)
-            make.width.equalTo(200)
+            make.left.right.equalTo(view)
+            make.centerY.equalTo(view)
+            make.height.equalTo(200)
         }
     }
     
@@ -46,4 +45,3 @@ class ViewController: UIViewController, RulerDelegate {
     }
 
 }
-

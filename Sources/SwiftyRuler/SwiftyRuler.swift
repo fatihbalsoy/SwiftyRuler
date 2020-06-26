@@ -72,6 +72,8 @@ private class RulerMeasurements {
 }
 
 // MARK: - Ruler
+public typealias SwiftyRuler = Ruler
+public typealias SwiftyRulerDelegate = RulerDelegate
 
 /// UIView subclass, Ruler, renders all the required visual components like ticks and labels
 public class Ruler: UIView {
@@ -155,7 +157,6 @@ public class Ruler: UIView {
     // MARK: - Draw
 
     public override func draw(_ rect: CGRect) {
-        backgroundColor = .clear
         if pixelAccurate { generateForScreen() }
 
         layoutTicks(for: units, mirror: false)

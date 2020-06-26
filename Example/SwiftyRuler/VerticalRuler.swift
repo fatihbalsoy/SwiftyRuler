@@ -1,16 +1,16 @@
 //
-//  ViewController.swift
-//  SwiftyRuler
+//  VerticalRuler.swift
+//  SwiftyRuler_Example
 //
-//  Created by Fatih Balsoy on 06/21/2020.
-//  Copyright (c) 2020 Fatih Balsoy. All rights reserved.
+//  Created by Fatih Balsoy on 6/22/20.
+//  Copyright © 2020 CocoaPods. All rights reserved.
 //
 
 import UIKit
 import SwiftyRuler
 import SnapKit
 
-class ViewController: UIViewController, RulerDelegate {
+class VerticalRuler: UIViewController, RulerDelegate {
     
     let ruler: Ruler = {
         let ruler = Ruler()
