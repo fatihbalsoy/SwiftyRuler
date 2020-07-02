@@ -1,5 +1,5 @@
 //
-//  UXKit-Lite.swift
+//  UXKit.swift
 //  SwiftyRuler
 //
 //  Created by Fatih Balsoy on 6/22/20.

@@ -23,6 +23,11 @@ class VerticalRuler: UIViewController, RulerDelegate {
         return ruler
     }()
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        ruler.setNeedsDisplay()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

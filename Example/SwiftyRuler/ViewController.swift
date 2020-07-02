@@ -6,44 +6,44 @@
 //  Copyright (c) 2020 Fatih Balsoy. All rights reserved.
 //
 
-import UIKit
-import SwiftyRuler
 import SnapKit
+import UIKit
 
-class ViewController: UIViewController, RulerDelegate {
-    
-    let ruler: Ruler = {
-        let ruler = Ruler()
-        ruler.longTickLength = 30
-        ruler.shortTickLength = 10
-        ruler.midTickLength = ruler.midLineLength(2)
-        ruler.pixelAccurate = true
-        ruler.doubleUnits = true
-        ruler.direction = .vertical
-        return ruler
-    }()
-    
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    let examples: [(UIViewController, String)] = [
+        (HorizontalRuler(), "HorizontalRuler"),
+        (VerticalRuler(), "Vertical Ruler")
+    ]
+    let table = UITableView()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        ruler.delegate = self
-        
-        ruler.backgroundColor = UIColor.black.withAlphaComponent(0.05)
-        ruler.tickColor = .black
-        ruler.labelColor = .black
-        
-        view.addSubview(ruler)
-        ruler.snp.makeConstraints { (make) in
-            make.top.bottom.equalTo(view)
-            make.centerX.equalTo(view)
-            make.width.equalTo(200)
+
+        title = "SwiftyRuler Examples"
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        table.delegate = self
+        table.dataSource = self
+
+        view.addSubview(table)
+        table.snp.makeConstraints { make in
+            make.left.top.right.bottom.equalTo(view)
         }
     }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        ruler.setNeedsDisplay()
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return examples.count
     }
 
-}
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let controller = examples[indexPath.row].0
+        controller.title = examples[indexPath.row].1
+        controller.view.backgroundColor = .systemBackground
+        navigationController?.pushViewController(controller, animated: true)
+    }
 
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+        cell.textLabel?.text = examples[indexPath.row].1
+        return cell
+    }
+}
