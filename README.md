@@ -22,4 +22,4 @@ pod 'SwiftyRuler'
 
 ## License
 
-SwiftyRuler is available under the MIT license. See the LICENSE file for more info.
+SwiftyRuler is available under the AGPL license. See the LICENSE file for more info.

@@ -32,9 +32,9 @@ class HorizontalRuler: UIViewController, RulerDelegate {
         
         ruler.delegate = self
         
-        ruler.backgroundColor = UIColor.black.withAlphaComponent(0.05)
-        ruler.tickColor = .black
-        ruler.labelColor = .black
+        ruler.backgroundColor = UIColor.label.withAlphaComponent(0.05)
+        ruler.tickColor = .label
+        ruler.labelColor = .label
         
         view.addSubview(ruler)
         ruler.snp.makeConstraints { (make) in

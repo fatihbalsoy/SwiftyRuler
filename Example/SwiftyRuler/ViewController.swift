@@ -11,8 +11,9 @@ import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let examples: [(UIViewController, String)] = [
-        (HorizontalRuler(), "HorizontalRuler"),
-        (VerticalRuler(), "Vertical Ruler")
+        (HorizontalRuler(), "Horizontal"),
+        (VerticalRuler(), "Vertical"),
+        (DocumentRuler(), "Document")
     ]
     let table = UITableView()
 
