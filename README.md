@@ -1,12 +1,13 @@
 ![Alt text](ruler-github.png?raw=true  "SwiftyRuler")
 
 [![Swift](https://img.shields.io/badge/swift-5.2-orange)](https://github.com/apple/swift/tree/swift-5.2-branch)
+[![build](https://img.shields.io/github/actions/workflow/status/fatihbalsoy/SwiftyRuler/swift.yml)](https://github.com/fatihbalsoy/SwiftyRuler/actions)
 [![License](https://img.shields.io/github/license/fatihbalsoy/SwiftyRuler)](https://img.shields.io/github/license/fatihbalsoy/SwiftyRuler/LICENSE)
 ![iOS](https://img.shields.io/badge/iOS-8.0%2B-blue)
 ![macOS](https://img.shields.io/badge/macOS-10.12%2B-orange)
 ![tvOS](https://img.shields.io/badge/tvOS-9.0%2B-white)
 
-SwiftyRuler is a very simple Swift package that implements an accurate ruler for any iOS device.
+SwiftyRuler is a very simple Swift package that implements an accurate ruler for any iOS device. Nothing more, nothing less.
 
 ## Example
 
@@ -37,6 +38,9 @@ If you prefer not to use any of the aforementioned dependency managers, you can 
 ## Usage
 
 ``` swift
+import SwiftyRuler
+import UIKit
+
 class ViewController : UIViewController, RulerDelegate {
 
     override func viewDidLoad() {
