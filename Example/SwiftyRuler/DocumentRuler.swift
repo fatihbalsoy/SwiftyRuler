@@ -3,7 +3,7 @@
 //  SwiftyRuler_Example
 //
 //  Created by Fatih Balsoy on 7/17/20.
-//  Copyright © 2020 CocoaPods. All rights reserved.
+//  Copyright © 2020 Fatih Balsoy. All rights reserved.
 //
 
 import UIKit
