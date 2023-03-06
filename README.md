@@ -2,7 +2,7 @@
 
 [![Swift](https://img.shields.io/badge/swift-5.2-orange)](https://github.com/apple/swift/tree/swift-5.2-branch)
 [![build](https://img.shields.io/github/actions/workflow/status/fatihbalsoy/SwiftyRuler/.github/workflows/swift.yml)](https://github.com/fatihbalsoy/SwiftyRuler/actions)
-[![License](https://img.shields.io/github/license/fatihbalsoy/SwiftyRuler)](https://img.shields.io/github/license/fatihbalsoy/SwiftyRuler/LICENSE)
+[![License](https://img.shields.io/github/license/fatihbalsoy/SwiftyRuler?color=blue)](https://github.com/fatihbalsoy/SwiftyRuler/blob/master/LICENSE)
 ![iOS](https://img.shields.io/badge/iOS-8.0%2B-blue)
 ![macOS](https://img.shields.io/badge/macOS-10.12%2B-orange)
 ![tvOS](https://img.shields.io/badge/tvOS-9.0%2B-white)
