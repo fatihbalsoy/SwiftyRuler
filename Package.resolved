@@ -5,9 +5,9 @@
         "package": "GBDeviceInfo",
         "repositoryURL": "https://github.com/lmirosevic/GBDeviceInfo.git",
         "state": {
-          "branch": "master",
-          "revision": "3146a7a2708fd40075c28863e853831806cb065f",
-          "version": null
+          "branch": null,
+          "revision": "f746467bc807c4014adf8acbb6524e3326388d73",
+          "version": "7.2.0"
         }
       }
     ]

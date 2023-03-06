@@ -1,4 +1,4 @@
-![Alt text](ruler-github.png?raw=true  "SwiftyRuler")
+![Alt text](.readme/ruler-github.png?raw=true  "SwiftyRuler")
 
 [![Swift](https://img.shields.io/badge/swift-5.2-orange)](https://github.com/apple/swift/tree/swift-5.2-branch)
 [![build](https://img.shields.io/github/actions/workflow/status/fatihbalsoy/SwiftyRuler/swift.yml)](https://github.com/fatihbalsoy/SwiftyRuler/actions)
@@ -15,7 +15,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 Vertical|Horizontal|Document
 :--:|:--:|:--:
-![Alt text](ruler-vertical.png?raw=true  "Vertical") | ![Alt text](ruler-horizontal.png?raw=true  "Horizontal") | ![Alt text](ruler-document.png?raw=true  "Document")
+![Alt text](.readme/ruler-vertical.png?raw=true  "Vertical") | ![Alt text](.readme/ruler-horizontal.png?raw=true  "Horizontal") | ![Alt text](.readme/ruler-document.png?raw=true  "Document")
 
 ## Installation
 
